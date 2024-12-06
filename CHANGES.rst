@@ -1,4 +1,4 @@
-1.19.0 (unreleased)
+1.20.0 (unreleased)
 -------------------
 
 New Features
@@ -9,6 +9,25 @@ Bug Fixes
 
 Other Changes and Additions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1.19.0 (2024-11-05)
+-------------------
+
+Bug Fixes
+^^^^^^^^^
+
+- Fixed ``mwmVisit`` SDSS-V ``Spectrum1D`` and ``SpectrumList`` default loader
+  being unable to load files containing only BOSS instrument spectra. [#1185]
+
+- Fixed automatic format detection for SDSS-V ``SpectrumList`` default loaders. [#1185]
+
+- Fixed ``SplineInterpolatedResampler`` when input and output spectral axes are different
+  physical types, e.g. wavelength and velocity. [#1190]
+
+Other Changes and Additions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- "Multi" loaders have been removed from SDSS-V ``SpectrumList`` default loaders. [#1185]
 
 1.18.0 (2024-10-16)
 -------------------

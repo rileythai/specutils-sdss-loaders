@@ -763,9 +763,9 @@ def _load_astra_hdu(hdulist: HDUList, hdu: int, **kwargs):
 
     # collapse shape if 1D spectra in 2D array, makes readout easier
     if flux.shape[0] == 1:
-        flux = flux[0]
-        e_flux = e_flux[0]
-        mask = mask[0]
+        flux = np.ravel(flux)
+        e_flux = e_flux[0]  # different class
+        mask = np.ravel(mask)
 
     # Create metadata
     meta = dict()
@@ -773,7 +773,7 @@ def _load_astra_hdu(hdulist: HDUList, hdu: int, **kwargs):
 
     # Add identifiers (obj, telescope, mjd, datatype)
     meta["telescope"] = hdulist[hdu].data["telescope"]
-    meta['instrument'] = 'BOSS' if hdu <= 2 else 'APOGEE'
+    meta["instrument"] = hdulist[hdu].header.get("INSTRMNT")
     try:  # get obj if exists
         meta["obj"] = hdulist[hdu].data["obj"]
     except KeyError:
@@ -791,6 +791,7 @@ def _load_astra_hdu(hdulist: HDUList, hdu: int, **kwargs):
         meta["name"] = hdulist[hdu].name
         meta["sdss_id"] = hdulist[hdu].data['sdss_id']
 
+    # drop back a list of Spectrum1Ds to unpack
     return Spectrum1D(
         spectral_axis=spectral_axis,
         flux=flux,
