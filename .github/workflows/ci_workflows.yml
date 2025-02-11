@@ -63,7 +63,7 @@ jobs:
     # TODO: Do we need --gcov-glob "*cextern*" ?
     - name: Upload coverage to artifacts
       if: ${{ contains(matrix.toxenv,'-cov') }}
-      uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882  # v4.4.3
+      uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b  # v4.5.0
       with:
         name: coverage_${{ matrix.toxenv }}.xml
         path: coverage.xml
@@ -84,7 +84,7 @@ jobs:
         merge-multiple: true
     - name: Upload report to Codecov
       if: ${{ hashFiles('coverage/') != '' }}
-      uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238  # v4.6.0
+      uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303  # v5.1.2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         directory: coverage

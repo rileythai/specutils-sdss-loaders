@@ -10,6 +10,9 @@ New Features
 Bug Fixes
 ^^^^^^^^^
 
+- Fixed loaders for IRAF-encoded non-linear Chebychev + Legendre wavelength
+  solutions that were imposing integer-valued domain limits. [#1199]
+
 Other Changes and Additions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
