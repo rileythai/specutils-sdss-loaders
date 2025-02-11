@@ -1,4 +1,5 @@
 """Register reader functions for various spectral formats."""
+
 import warnings
 from typing import Optional
 
@@ -85,20 +86,20 @@ def mwm_identify(origin, *args, **kwargs):
         return (("V_ASTRA" in hdulist[0].header.keys()) and len(hdulist) > 0
                 and ("SDSS_ID" in hdulist[0].header.keys())
                 and (isinstance(hdulist[i], BinTableHDU) for i in range(1, 5))
-                and all('model_flux' not in hdulist[i].columns.names
+                and all("model_flux" not in hdulist[i].columns.names
                         for i in range(1, 5)))
 
 
 def astra_identify(origin, *args, **kwargs):
     """
-    Check whether given input is FITS and has SDSS-V astra model spectra 
+    Check whether given input is FITS and has SDSS-V astra model spectra
     BINTABLE in all 4 extensions. This is used for Astropy I/O Registry.
     """
     with read_fileobj_or_hdulist(*args, **kwargs) as hdulist:
         return (("V_ASTRA" in hdulist[0].header.keys()) and len(hdulist) > 0
                 and ("SDSS_ID" in hdulist[0].header.keys())
                 and (isinstance(hdulist[i], BinTableHDU) for i in range(1, 5))
-                and all('model_flux' in hdulist[i].columns.names
+                and all("model_flux" in hdulist[i].columns.names
                         for i in range(1, 5)))
 
 
@@ -355,7 +356,7 @@ def load_sdss_spec_1D(file_obj, *args, hdu: Optional[int] = None, **kwargs):
     """
     if hdu is None:
         # TODO: how should we handle this -- multiple things in file, but the user cannot choose.
-        warnings.warn('HDU not specified. Loading coadd spectrum (HDU1)',
+        warnings.warn("HDU not specified. Loading coadd spectrum (HDU1)",
                       AstropyUserWarning)
         hdu = 1  # defaulting to coadd
         # raise ValueError("HDU not specified! Please specify a HDU to load.")
@@ -488,8 +489,10 @@ def load_sdss_mwm_1d(file_obj,
                 if hdulist[i].header.get("DATASUM") != "0":
                     hdu = i
                     warnings.warn(
-                        'HDU not specified. Loading spectrum at (HDU{})'.
-                        format(i), AstropyUserWarning)
+                        "HDU not specified. Loading spectrum at (HDU{})".
+                        format(i),
+                        AstropyUserWarning,
+                    )
                     break
 
         # load spectra and return
@@ -608,7 +611,7 @@ def _load_mwmVisit_or_mwmStar_hdu(hdulist: HDUList, hdu: int, **kwargs):
 
     # choose between mwmVisit/Star via KeyError except
     try:
-        meta['mjd'] = hdulist[hdu].data['mjd']
+        meta["mjd"] = hdulist[hdu].data["mjd"]
         meta["datatype"] = "mwmVisit"
     except KeyError:
         meta["min_mjd"] = str(hdulist[hdu].data["min_mjd"][0])
@@ -616,7 +619,7 @@ def _load_mwmVisit_or_mwmStar_hdu(hdulist: HDUList, hdu: int, **kwargs):
         meta["datatype"] = "mwmStar"
     finally:
         meta["name"] = hdulist[hdu].name
-        meta["sdss_id"] = hdulist[hdu].data['sdss_id']
+        meta["sdss_id"] = hdulist[hdu].data["sdss_id"]
 
     # drop back a list of Spectrum1Ds to unpack
     return Spectrum1D(
@@ -664,8 +667,10 @@ def load_astra_1d(file_obj, hdu: Optional[int] = None, **kwargs):
                 if hdulist[i].header.get("DATASUM") != "0":
                     hdu = i
                     warnings.warn(
-                        'HDU not specified. Loading spectrum at (HDU{})'.
-                        format(i), AstropyUserWarning)
+                        "HDU not specified. Loading spectrum at (HDU{})".
+                        format(i),
+                        AstropyUserWarning,
+                    )
                     break
 
         return _load_astra_hdu(hdulist, hdu, **kwargs)
@@ -752,7 +757,7 @@ def _load_astra_hdu(hdulist: HDUList, hdu: int, **kwargs):
     # NOTE:: flux info is not written
     flux_unit = Unit("1e-17 erg / (Angstrom cm2 s)")  # NOTE: hardcoded unit
     flux = Quantity(hdulist[hdu].data["model_flux"] *
-                    hdulist[hdu].data['continuum'],
+                    hdulist[hdu].data["continuum"],
                     unit=flux_unit)
     e_flux = InverseVariance(array=hdulist[hdu].data["ivar"])
 
@@ -781,7 +786,7 @@ def _load_astra_hdu(hdulist: HDUList, hdu: int, **kwargs):
 
     # choose between mwmVisit/Star via KeyError except
     try:
-        meta['mjd'] = hdulist[hdu].data['mjd']
+        meta["mjd"] = hdulist[hdu].data["mjd"]
         meta["datatype"] = "astraVisit"
     except KeyError:
         meta["min_mjd"] = str(hdulist[hdu].data["min_mjd"][0])
@@ -789,7 +794,7 @@ def _load_astra_hdu(hdulist: HDUList, hdu: int, **kwargs):
         meta["datatype"] = "astraStar"
     finally:
         meta["name"] = hdulist[hdu].name
-        meta["sdss_id"] = hdulist[hdu].data['sdss_id']
+        meta["sdss_id"] = hdulist[hdu].data["sdss_id"]
 
     # drop back a list of Spectrum1Ds to unpack
     return Spectrum1D(
